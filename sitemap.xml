@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- 主頁 - 繁體中文 (ja/mangaimmersive) -->
+  <url>
+    <loc>https://immersivetranslate.com/ja/mangaimmersive/</loc>
+    <lastmod>2024-12-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://immersivetranslate.com/ja/mangaimmersive/"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://immersivetranslate.com/zh/mangaimmersive/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://immersivetranslate.com/en/mangaimmersive/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://immersivetranslate.com/ja/mangaimmersive/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://immersivetranslate.com/ko/mangaimmersive/"/>
+  </url>
+
+  <!-- 英文版 -->
+  <url>
+    <loc>https://immersivetranslate.com/en/mangaimmersive/</loc>
+    <lastmod>2024-12-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="zh-TW" href="https://immersivetranslate.com/ja/mangaimmersive/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://immersivetranslate.com/en/mangaimmersive/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://immersivetranslate.com/ja/mangaimmersive/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://immersivetranslate.com/ko/mangaimmersive/"/>
+  </url>
+
+  <!-- 日文版 -->
+  <url>
+    <loc>https://immersivetranslate.com/ja/mangaimmersive/</loc>
+    <lastmod>2024-12-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://immersivetranslate.com/ja/mangaimmersive/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://immersivetranslate.com/en/mangaimmersive/"/>
+  </url>
+
+  <!-- 韓文版 -->
+  <url>
+    <loc>https://immersivetranslate.com/ko/mangaimmersive/</loc>
+    <lastmod>2024-12-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://immersivetranslate.com/ko/mangaimmersive/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://immersivetranslate.com/en/mangaimmersive/"/>
+  </url>
+
+  <!-- 簡體中文版 -->
+  <url>
+    <loc>https://immersivetranslate.com/zh/mangaimmersive/</loc>
+    <lastmod>2024-12-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://immersivetranslate.com/zh/mangaimmersive/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://immersivetranslate.com/en/mangaimmersive/"/>
+  </url>
+
+</urlset>
