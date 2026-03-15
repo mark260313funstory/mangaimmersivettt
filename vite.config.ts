@@ -1,6 +1,7 @@
 import { jsxLocPlugin } from "@builder.io/vite-plugin-jsx-loc";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
+import { execSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { defineConfig, type Plugin, type ViteDevServer } from "vite";
@@ -150,7 +151,85 @@ function vitePluginManusDebugCollector(): Plugin {
   };
 }
 
-const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector()];
+// =============================================================================
+// CDN Upload Plugin - uploads JS/CSS assets to CloudFront after build
+// Replaces /assets/xxx paths in index.html with CloudFront URLs
+// =============================================================================
+function vitePluginCdnUpload(): Plugin {
+  return {
+    name: "manus-cdn-upload",
+    apply: "build", // Only run during build, not dev
+    closeBundle() {
+      const distAssetsDir = path.join(PROJECT_ROOT, "dist/public/assets");
+      const indexHtmlPath = path.join(PROJECT_ROOT, "dist/public/index.html");
+
+      if (!fs.existsSync(distAssetsDir)) {
+        console.log("[cdn-upload] No assets dir found, skipping.");
+        return;
+      }
+
+      const assetFiles = fs
+        .readdirSync(distAssetsDir)
+        .filter((f) => fs.statSync(path.join(distAssetsDir, f)).isFile());
+
+      if (assetFiles.length === 0) {
+        console.log("[cdn-upload] No asset files found, skipping.");
+        return;
+      }
+
+      console.log(`\n☁️  [cdn-upload] Uploading ${assetFiles.length} asset(s) to CloudFront...`);
+
+      const filePaths = assetFiles
+        .map((f) => path.join(distAssetsDir, f))
+        .join(" ");
+
+      let uploadOutput: string;
+      try {
+        uploadOutput = execSync(`manus-upload-file --webdev ${filePaths}`, {
+          encoding: "utf-8",
+        });
+      } catch (err) {
+        console.warn("[cdn-upload] Upload failed, keeping local paths.", err);
+        return;
+      }
+
+      // Parse CDN URLs from upload output
+      const cdnMap: Record<string, string> = {};
+      for (const line of uploadOutput.split("\n")) {
+        const match = line.match(
+          /\[SUCCESS\].*?(\S+\.(?:js|css|woff2?|png|svg|ico))\s+->\s+(https:\/\/\S+)/
+        );
+        if (match) {
+          const localFile = path.basename(match[1]);
+          cdnMap[localFile] = match[2];
+          console.log(`  ✅ ${localFile} -> ${match[2]}`);
+        }
+      }
+
+      if (Object.keys(cdnMap).length === 0) {
+        console.warn("[cdn-upload] Could not parse CDN URLs, keeping local paths.");
+        return;
+      }
+
+      // Update index.html with CDN URLs
+      if (!fs.existsSync(indexHtmlPath)) {
+        console.warn("[cdn-upload] index.html not found.");
+        return;
+      }
+
+      let html = fs.readFileSync(indexHtmlPath, "utf-8");
+      for (const [localFile, cdnUrl] of Object.entries(cdnMap)) {
+        const escaped = localFile.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        const regex = new RegExp(`(src|href)="/assets/${escaped}"`, "g");
+        html = html.replace(regex, `$1="${cdnUrl}"`);
+      }
+      fs.writeFileSync(indexHtmlPath, html, "utf-8");
+      console.log("  📝 index.html updated with CloudFront URLs.\n");
+    },
+  };
+}
+
+const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector(), vitePluginCdnUpload()];
 
 export default defineConfig({
   plugins,
