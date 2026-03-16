@@ -1,9 +1,2 @@
-# robots.txt for mangaimmersivettt
-# Hosted via Manus, proxied through immersivetranslate.com
-# Only immersivetranslate.com should be indexed by search engines.
-
 User-agent: *
-Allow: /
-
-# Sitemap (canonical domain only)
-Sitemap: https://immersivetranslate.com/ja/mangaimmersive/sitemap.xml
+Disallow: /
