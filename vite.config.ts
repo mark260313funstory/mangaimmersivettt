@@ -150,7 +150,29 @@ function vitePluginManusDebugCollector(): Plugin {
   };
 }
 
-const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector()];
+// Static HTML mode: serve client/public/index.html directly, bypass React
+function vitePluginStaticHtml(): Plugin {
+  return {
+    name: 'vite-plugin-static-html',
+    configureServer(server: ViteDevServer) {
+      server.middlewares.use((req, res, next) => {
+        const url = req.url?.split('?')[0] ?? '/';
+        // Serve static HTML for root and HTML routes
+        if (url === '/' || url === '/index.html') {
+          const htmlPath = path.resolve(import.meta.dirname, 'client/public/index.html');
+          if (fs.existsSync(htmlPath)) {
+            res.setHeader('Content-Type', 'text/html; charset=utf-8');
+            res.end(fs.readFileSync(htmlPath, 'utf-8'));
+            return;
+          }
+        }
+        next();
+      });
+    },
+  };
+}
+
+const plugins = [vitePluginStaticHtml(), vitePluginManusRuntime(), vitePluginManusDebugCollector()];
 
 export default defineConfig({
   plugins,
